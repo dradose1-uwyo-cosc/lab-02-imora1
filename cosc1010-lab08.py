@@ -1,68 +1,54 @@
 #Isabell Mora
-#Lab Section-11
-#11-5-24
-#Sources, help given to/received from
+#UW COSC 1010
+#11-19-24
+#HW05
+#sources: , people worked with:
+import openpyxl
+from openpyxl.styles import PatternFill
+import string
 
-def leap_year(year):
-    """Checking if a year is a leap year."""
-    return (year % 4 == 0 and (year % 100 != 0 or year % 400 == 0))
+wb = openpyxl.Workbook()
+sheet = wb.active
+colors = {'B':'0000FF', 'R':'FF0000', 'Y':'FFFFFF','G':'008000','P':'FF69B4'}
+cells = {
+    'A1': 'R', 'B1': 'R', 'C1': 'R', 'D1': 'R', 'E1': 'R',
+    'A2': 'R', 'B2': 'P', 'C2': 'Y', 'D2': 'P', 'E2': 'R',
+    'A3': 'R', 'B3': 'Y', 'C3': 'Y', 'D3': 'Y', 'E3': 'R',
+    'A4': 'R', 'B4': 'Y', 'C4': 'Y', 'D4': 'Y', 'E4': 'R',
+    'A5': 'R', 'B5': 'Y', 'C5': 'Y', 'D5': 'Y', 'E5': 'R',
+    'A6': 'R', 'B6': 'P', 'C6': 'Y', 'D6': 'P', 'E6': 'R',
+    'A7': 'R', 'B7': 'R', 'C7': 'R', 'D7': 'R', 'E7': 'R',
+    'B0': 'P', 'C0': 'P', 'D0': 'P', 'C8': 'P', 'D8': 'P', 
+    'C9': 'P','A8': 'G', 'A9': 'G', 'A10': 'G','B8': 'G', 
+    'B9': 'G','C8': 'G', 'C9': 'G','D9': 'G', 'D10': 'G',
+    'F8': 'G', 'F9': 'G', 'F10': 'G','G8': 'G', 'G9': 'G',
+    'F7': 'G',
+}
+c_sky = PatternFill(fill_type='solid', start_color='0000FF', end_color='0000FF')
+fill = {}
+for coord, color_key in cells.items():
+    color = colors[color_key]
+    fill[coord] = PatternFill(start_color=color, end_color=color, fill_type='solid')
 
-def first_day_of_year(year):
-    """Calculate the day of the weel"""
-    y = year - 1
-    return (36 + y + (y // 4) - (y // 100) + (y // 400)) % 7
+for chr in string.ascii_uppercase[:12]:
+    sheet.column_dimensions[chr].width = 5
 
-def valid_date(month, day, year):
-    """Checking if date is valid"""
-    month_days = {
-        1: 31, 2: 29 if leap_year(year) else 28, 3: 31, 4: 30, 5: 31, 6: 30,
-        7: 31, 8: 31, 9: 30, 10: 31, 11: 30, 12: 31
-    }
-    return 1 <= month <= 12 and 1 <= day <= month_days.get(month, 0)
+for i in range(1,11):
+    sheet.row_dimensions[i].height = 20
 
-def day_of_week_for_date(month, day, year):
-    """Calculate the day of the week for a given date."""
-    days_of_week = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-    
-    if not valid_date(month, day, year):
-        return "Please enter valid date"
-    
-    jan_first_day = first_day_of_year(year)
-    
-    days_in_month = {
-        1: 31, 2: 29 if leap_year(year) else 28, 3: 31, 4: 30, 5: 31, 6: 30,
-        7: 31, 8: 31, 9: 30, 10: 31, 11: 30, 12: 31
-    }
-    
-    days_since_jan_first = sum(days_in_month[m] for m in range(1, month)) + (day - 1)
-    
-    weekday = (jan_first_day + days_since_jan_first) % 7
-    return days_of_week[weekday]
+for chr in string.ascii_uppercase[:12]:
+    for i in range(1,11):
+        coord = chr +str(i)
+        if coord in cells:
+            sheet[coord].fill = fill[coord]
+        else:
+            sheet[coord].fill = c_sky
+wb.save("flower_design.xlsx")
 
-def p_date(date_str):
-    if len(date_str) != 10 or date_str[2] != '/' or date_str[5] != '/':
-        return None
-    month_str, day_str, year_str = date_str[:2], date_str[3:5], date_str[6:]
-    if not (month_str.isdigit() and day_str.isdigit() and year_str.isdigit()):
-        return None
-    return int(month_str), int(day_str), int(year_str)
 
-def main():
-    while True:
-        date_str = input("Enter a date in MM/DD/YYYY format (or type 'exit' to quit): ")
-        if date_str.lower() == "exit":
-            break
 
-        parsed_date = p_date(date_str)
-        if parsed_date is None:
-            print("Invalid input. Please enter the date in MM/DD/YYYY format.")
-            continue
 
-        month, day, year = parsed_date
 
-        day_of_week = day_of_week_for_date(month, day, year)
-        print(f"{date_str} {day_of_week}")
-main()
 
 
 
