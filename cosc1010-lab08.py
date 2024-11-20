@@ -9,11 +9,11 @@ import string
 
 wb = openpyxl.Workbook()
 sheet = wb.active
-colors = {'B':'0000FF', 'R':'FF0000', 'Y':'FFFFFF','G':'008000','P':'FF69B4'}
+colors = {'B':'0000FF', 'R':'FF0000', 'Y':'FFFF00','G':'008000','P':'FF69B4'}
 
 cells = {'F7':'G','F8':'G','F9':'G','F10':'G',
-         'E9':'G','G9':'G','H8':'G','F6':'R',
-         'F4':'P','F6':'P','G5':'P','E5':'P','L1':'Y','L2':'Y','L3':'Y','D8':'G'}
+         'E9':'G','G9':'G','H8':'G','F5':'R','F6':'P',
+         'F4':'P','G5':'P','E5':'P','L1':'Y','L2':'Y','L3':'Y','D8':'G'}
 c_sky = PatternFill(fill_type='solid', start_color='0000FF', end_color='0000FF')
 fill = {}
 for coord, color_key in cells.items():
